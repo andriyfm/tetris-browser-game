@@ -94,7 +94,46 @@
   }
   truthy('flappy: skor bertambah setelah melewati pipa', g.game.debugState().score >= 1, g.game.debugState().score);
 
-  /* ---------- 5. KEMBALI KE MENU ---------- */
+  /* ---------- 5. TAMAGOTCHI ---------- */
+  g.launch('tamagochi');
+  check('tama: panel tampil', document.getElementById('panel').hidden, false);
+  check('tama: label panel AGE', document.getElementById('l1').textContent, 'AGE');
+  check('tama: slot keempat disembunyikan', document.querySelector('[data-slot="4"]').hidden, true);
+
+  g.startRound();
+  var m0 = g.game.debugState();
+  check('tama: state setelah start', m0.state, 'playing');
+  check('tama: nyawa penuh', m0.health, 100);
+
+  /* waktu berjalan -> usia naik, stat turun */
+  g.step(16, 130);                       // ~2 detik
+  var m1 = g.game.debugState();
+  truthy('tama: usia bertambah', m1.age > m0.age, { dari: m0.age, ke: m1.age });
+  truthy('tama: lapar bertambah (hunger turun)', m1.hunger < m0.hunger, { dari: m0.hunger, ke: m1.hunger });
+
+  /* buka menu -> pilih PLAY (index 1) */
+  g.input('a');
+  check('tama: menu terbuka', g.game.debugState().menuOpen, true);
+  g.input('down');
+  check('tama: navigasi menu', g.game.debugState().sel, 1);
+  g.input('a');                          // jalankan PLAY
+  var m2 = g.game.debugState();
+  check('tama: menu tertutup setelah aksi', m2.menuOpen, false);
+  truthy('tama: PLAY menaikkan kebahagiaan', m2.happy >= m1.happy, { dari: m1.happy, ke: m2.happy });
+
+  /* FEED (index 0) memulihkan hunger */
+  g.input('a'); g.input('a');
+  var m3 = g.game.debugState();
+  truthy('tama: FEED menaikkan hunger', m3.hunger > m2.hunger, { dari: m2.hunger, ke: m3.hunger });
+
+  /* biarkan kelaparan sampai mati */
+  for (var t2 = 0; t2 < 4000 && g.game.state === 'playing'; t2++) g.step(16, 1);
+  var m4 = g.game.debugState();
+  check('tama: game over saat diabaikan', m4.state, 'over');
+  check('tama: makhluk mati', m4.alive, false);
+  truthy('tama: skor = usia (hari)', m4.score >= 0, m4.score);
+
+  /* ---------- 6. KEMBALI KE MENU ---------- */
   g.menu();
   check('kembali ke menu', g.def.id, 'menu');
 

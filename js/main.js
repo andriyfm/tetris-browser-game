@@ -42,7 +42,7 @@
   var hiCache = {};
 
   function loadHi() {
-    var ids = ['tetris', 'metalslug', 'flappy'];
+    var ids = ['tetris', 'metalslug', 'flappy', 'tamagochi'];
     for (var i = 0; i < ids.length; i++) {
       var v = 0;
       try { v = parseInt(localStorage.getItem('hi-' + ids[i]) || '0', 10) || 0; } catch (e) {}

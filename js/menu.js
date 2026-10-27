@@ -12,7 +12,8 @@ window.MINIGAME = window.MINIGAME || {};
   var ITEMS = [
     { id: 'tetris',   name: 'TETRIS',      sub: 'BLOCK GAME',  year: '1990' },
     { id: 'metalslug', name: 'METAL SLUG', sub: 'RUN N GUN',   year: '1996' },
-    { id: 'flappy',   name: 'FLAPPY',      sub: 'ONE BUTTON',  year: '2013' }
+    { id: 'flappy',   name: 'FLAPPY',      sub: 'ONE BUTTON',  year: '2013' },
+    { id: 'tamagochi', name: 'TAMAGOTCHI', sub: 'VIRTUAL PET', year: '1996' }
   ];
 
   /* ---------- ikon mini, digambar dengan kotak ---------- */
@@ -35,7 +36,7 @@ window.MINIGAME = window.MINIGAME || {};
       px(22, 18, 9, 3);     // senapan
       px(8, 25, 5, 7);      // kaki kiri
       px(17, 25, 5, 7);     // kaki kanan
-    } else {
+    } else if (id === 'flappy') {
       /* burung + pipa */
       px(4, 12, 12, 9);     // badan burung
       px(16, 14, 5, 5);     // kepala
@@ -43,6 +44,14 @@ window.MINIGAME = window.MINIGAME || {};
       px(7, 10, 6, 3);      // sayap
       px(24, 6, 6, 26);     // pipa
       px(22, 6, 10, 4);     // kepala pipa
+    } else {
+      /* telur + makhluk kecil */
+      px(4, 10, 22, 22);    // badan telur
+      px(9, 16, 4, 4);      // mata kiri
+      px(17, 16, 4, 4);     // mata kanan
+      px(12, 22, 6, 3);     // mulut
+      px(0, 6, 7, 4);       // cangkang pecah kiri
+      px(23, 6, 7, 4);      // cangkang pecah kanan
     }
   }
 

@@ -1,6 +1,6 @@
-# MINI ARCADE — 3 Games in 1 (Handheld LCD 1990)
+# MINI ARCADE — 4 Games in 1 (Handheld LCD 1990)
 
-Tiga game klasik dalam **satu handheld LCD era 90-an**: Tetris, Metal Slug, dan Flappy Bird.
+Empat game klasik dalam **satu handheld LCD era 90-an**: Tetris, Metal Slug, Flappy Bird, dan Tamagotchi.
 Bodi plastik beige, layar LCD hijau dengan scanline, D-pad, tombol A/B merah, speaker grille,
 sampai stiker "© 1990" di bawah. Bukan full screen — device-nya berdiri di tengah halaman dan
 mengecil sendiri kalau layar pendek.
@@ -13,9 +13,9 @@ Pilih game dari menu cartridge, semua dirender monokrom di layar LCD yang sama.
 | --- | --- |
 | ![Tetris](docs/screen-tetris.jpg) | ![Metal Slug](docs/screen-slug.jpg) |
 
-| Flappy |
-| --- |
-| ![Flappy](docs/screen-flappy.jpg) |
+| Flappy | Tamagotchi |
+| --- | --- |
+| ![Flappy](docs/screen-flappy.jpg) | ![Tamagotchi](docs/screen-tama.jpg) |
 
 ## Main sekarang
 
@@ -50,6 +50,16 @@ setiap kali kamu mencapai ujung stage (+500 bonus). Kesulitan naik per misi.
 Fisika gravitasi + impuls kepak, pipa dengan celah acak, kecepatan naik seiring skor,
 ground scroll, dan skor besar di tengah layar.
 
+### 4. TAMAGOTCHI — *Virtual Pet (1996)*
+Rawat makhluk pixel: **FEED**, **PLAY**, **SLEEP**, **CLEAN**. Tiga stat (lapar, senang,
+energi) turun seiring waktu; kalau ada yang habis, nyawa (HEALTH) ikut berkurang. Kotoran
+muncul berkala dan menurunkan kebahagiaan sampai dibersihkan. Skor = **usia dalam hari**
+(1 hari ≈ 6 detik). Makhluk mati kalau terus diabaikan — jaga sampai tumbuh besar.
+
+Tekan **A** untuk membuka menu aksi, **↑ / ↓** untuk memilih, **A** untuk konfirmasi,
+**B** untuk menutup. Ekspresi wajah makhluk berubah sesuai kondisinya (idle, makan, tidur,
+senang, sedih, mati).
+
 ## Kontrol
 
 **Global**
@@ -69,6 +79,7 @@ ground scroll, dan skor besar di tengah layar.
 | Tetris | `←` `→` geser, `↓` turun, `↑` putar | jatuh langsung | putar balik |
 | Metal Slug | `←` `→` lari, `↑` bidik atas | lompat | tembak (tahan = auto) |
 | Flappy | — | kepak | kepak |
+| Tamagotchi | `↑` `↓` pilih menu aksi | buka menu / konfirmasi | tutup menu |
 
 Tombol device bisa diklik/ditap dan punya **auto-repeat** saat ditahan (geser/turun).
 Semua tombol punya `aria-label`.
@@ -85,16 +96,18 @@ Semua tombol punya `aria-label`.
 │   ├── tetris.js            # game 1
 │   ├── metalslug.js         # game 2
 │   ├── flappy.js            # game 3
+│   ├── tamagochi.js         # game 4
 │   └── main.js              # wiring device, loop, input, panel skor, auto-fit
 ├── assets/fonts/            # Press Start 2P (woff2) + lisensi OFL
 ├── docs/                    # screenshot README
-└── tests/smoke.console.js   # smoke test 21 cek (jalankan di Console browser)
+└── tests/smoke.console.js   # smoke test 36 cek (jalankan di Console browser)
 ```
 
 ## Detail teknis
 
 - **Satu layar, banyak game.** Setiap game mendeklarasikan ukuran kanvas logis dan rasio
-  layarnya sendiri: Tetris 180×360 (1:2), Metal Slug 320×180 (16:9), Flappy 180×320.
+  layarnya sendiri: Tetris 180×360 (1:2), Metal Slug 320×180 (16:9), Flappy 180×320,
+  Tamagotchi 180×320.
   Device menyesuaikan tinggi bezel, lalu auto-fit menghitung ulang skala.
 - **Kontrak game seragam:** `{ w, h, boardMax, usePanel, labels, create(api) }` dan instance
   dengan `reset()`, `update(dt)`, `render(ctx)`, `input(action)`, `state`.
@@ -123,9 +136,9 @@ __game.menu()                  // kembali ke menu
 ```
 
 **Smoke test:** buka `index.html?debug=1`, tempel isi `tests/smoke.console.js` ke Console.
-Hasilnya **21 cek PASS/FAIL** yang mencakup: boot menu, Tetris (blok terkunci, skor, panel),
+Hasilnya **36 cek PASS/FAIL** yang mencakup: boot menu, Tetris (blok terkunci, skor, panel),
 Metal Slug (gerak, lompat, mendarat, menembak), Flappy (gravitasi, kepak, skor pipa),
-dan kembali ke menu.
+Tamagotchi (usia & stat berjalan, menu aksi, FEED/PLAY, mati saat diabaikan), dan kembali ke menu.
 
 ## Lisensi
 
