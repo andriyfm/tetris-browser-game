@@ -29,6 +29,16 @@
   check('game awal adalah menu', g.def.id, 'menu');
   check('panel skor disembunyikan di menu', document.getElementById('panel').hidden, true);
 
+  /* ---------- 1b. MENU GRID: navigasi kiri/kanan ---------- */
+  g.input('right'); g.input('right'); g.input('right');
+  g.input('a');
+  check('menu grid: navigasi kanan sampai TAMAGOTCHI', g.def.id, 'tamagochi');
+  g.menu();
+  g.input('left'); g.input('left');
+  g.input('a');
+  check('menu grid: navigasi kiri membungkus ke FLAPPY', g.def.id, 'flappy');
+  g.menu();
+
   /* ---------- 2. TETRIS ---------- */
   g.launch('tetris');
   check('tetris: state awal', g.game.state, 'ready');

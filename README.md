@@ -66,7 +66,9 @@ senang, sedih, mati).
 
 | Aksi | Keyboard | Tombol device |
 | --- | --- | --- |
-| Pilih game | `↑` `↓` | D-pad atas / bawah |
+| Pilih game (grid) | `←` `→` (atau `↑` `↓`) | D-pad kiri / kanan |
+| Tombol A | `Space` / `X` / `A` | `A` |
+| Tombol B | `Z` / `B` | `B` |
 | Pause / lanjut | `P` | `PAUSE` |
 | Mulai / ulang ronde | `Enter` | `START` |
 | Kembali ke menu | `R` / `Esc` | `MENU` |
@@ -100,7 +102,7 @@ Semua tombol punya `aria-label`.
 │   └── main.js              # wiring device, loop, input, panel skor, auto-fit
 ├── assets/fonts/            # Press Start 2P (woff2) + lisensi OFL
 ├── docs/                    # screenshot README
-└── tests/smoke.console.js   # smoke test 36 cek (jalankan di Console browser)
+└── tests/smoke.console.js   # smoke test 38 cek (jalankan di Console browser)
 ```
 
 ## Detail teknis
@@ -136,7 +138,7 @@ __game.menu()                  // kembali ke menu
 ```
 
 **Smoke test:** buka `index.html?debug=1`, tempel isi `tests/smoke.console.js` ke Console.
-Hasilnya **36 cek PASS/FAIL** yang mencakup: boot menu, Tetris (blok terkunci, skor, panel),
+Hasilnya **38 cek PASS/FAIL** yang mencakup: boot menu + navigasi grid kiri/kanan, Tetris (blok terkunci, skor, panel),
 Metal Slug (gerak, lompat, mendarat, menembak), Flappy (gravitasi, kepak, skor pipa),
 Tamagotchi (usia & stat berjalan, menu aksi, FEED/PLAY, mati saat diabaikan), dan kembali ke menu.
 

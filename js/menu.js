@@ -1,7 +1,7 @@
 /* ============================================================
    MENU — GAME SELECT
-   Layar pemilihan cartridge: daftar game dengan ikon, skor
-   tertinggi, dan sorotan terbalik khas LCD.
+   Layar pemilihan cartridge: grid satu baris (ikon + nama),
+   info game terpilih, dan sorotan terbalik khas LCD.
    ============================================================ */
 
 window.MINIGAME = window.MINIGAME || {};
@@ -10,10 +10,10 @@ window.MINIGAME = window.MINIGAME || {};
   'use strict';
 
   var ITEMS = [
-    { id: 'tetris',   name: 'TETRIS',      sub: 'BLOCK GAME',  year: '1990' },
-    { id: 'metalslug', name: 'METAL SLUG', sub: 'RUN N GUN',   year: '1996' },
-    { id: 'flappy',   name: 'FLAPPY',      sub: 'ONE BUTTON',  year: '2013' },
-    { id: 'tamagochi', name: 'TAMAGOTCHI', sub: 'VIRTUAL PET', year: '1996' }
+    { id: 'tetris',   name: 'TETRIS',      sub: 'BLOCK GAME',  year: '1990', lines: ['TETRIS'] },
+    { id: 'metalslug', name: 'METAL SLUG', sub: 'RUN N GUN',   year: '1996', lines: ['METAL', 'SLUG'] },
+    { id: 'flappy',   name: 'FLAPPY',      sub: 'ONE BUTTON',  year: '2013', lines: ['FLAPPY'] },
+    { id: 'tamagochi', name: 'TAMAGOTCHI', sub: 'VIRTUAL PET', year: '1996', lines: ['TAMA', 'GOTCHI'] }
   ];
 
   /* ---------- ikon mini, digambar dengan kotak ---------- */
@@ -84,8 +84,8 @@ window.MINIGAME = window.MINIGAME || {};
       };
 
       self.input = function (action) {
-        if (action === 'up') { move(-1); return true; }
-        if (action === 'down') { move(1); return true; }
+        if (action === 'up' || action === 'left') { move(-1); return true; }
+        if (action === 'down' || action === 'right') { move(1); return true; }
         if (action === 'a' || action === 'start') {
           api.sfx.confirm();
           api.launch(ITEMS[sel].id);
@@ -105,47 +105,59 @@ window.MINIGAME = window.MINIGAME || {};
         /* judul */
         L.textCenter(ctx, 'GAME SELECT', 90, 14, 8);
         L.line(ctx, 14, 28, 166, 28, L.PAL.mid);
+        L.textCenter(ctx, 'PICK A CARTRIDGE', 90, 34, 8, L.PAL.mid);
 
-        /* daftar game */
-        var top = 40;
-        var rowH = 88;
+        /* ---------- grid 1 baris × N kolom ---------- */
+        var cols = ITEMS.length;
+        var gap = 2;
+        var tileW = 40;
+        var tileH = 96;
+        var totalW = cols * tileW + (cols - 1) * gap;
+        var x0 = Math.round((180 - totalW) / 2);
+        var tileY = 60;
 
-        for (var i = 0; i < ITEMS.length; i++) {
+        for (var i = 0; i < cols; i++) {
           var it = ITEMS[i];
-          var y = top + i * rowH;
+          var x = x0 + i * (tileW + gap);
           var active = i === sel;
 
           if (active) {
-            L.box(ctx, 10, y, 160, rowH - 8, L.PAL.ink);
+            L.box(ctx, x, tileY, tileW, tileH, L.PAL.ink);
           } else {
-            L.frame(ctx, 10, y, 160, rowH - 8, L.PAL.mid);
+            L.frame(ctx, x, tileY, tileW, tileH, L.PAL.mid);
           }
 
           var fg = active ? L.PAL.bg : L.PAL.ink;
+          icon(ctx, it.id, x + 4, tileY + 14, fg);
 
-          icon(ctx, it.id, 20, y + 22, fg);
-
-          L.text(ctx, it.name, 58, y + 18, 8, fg);
-          L.text(ctx, it.sub, 58, y + 34, 8, active ? L.PAL.bg : L.PAL.mid);
-
-          var hi = api.hi.get(it.id) || 0;
-          L.text(ctx, 'HI ' + hi, 58, y + 52, 8, active ? L.PAL.bg : L.PAL.mid);
-
-          if (active) {
-            /* penanda pilihan */
-            L.text(ctx, '>', 14, y + 18, 8, L.PAL.bg);
+          var lines = it.lines || [it.name];
+          for (var li = 0; li < lines.length; li++) {
+            L.textCenter(ctx, lines[li], x + tileW / 2, tileY + 52 + li * 8, 6, fg);
           }
         }
 
+        /* penunjuk pilihan di atas tile aktif */
+        var cx = Math.round(x0 + sel * (tileW + gap) + tileW / 2);
+        L.box(ctx, cx - 4, tileY - 11, 9, 2, L.PAL.ink);
+        L.box(ctx, cx - 3, tileY - 9, 7, 2, L.PAL.ink);
+        L.box(ctx, cx - 2, tileY - 7, 5, 2, L.PAL.ink);
+        L.box(ctx, cx - 1, tileY - 5, 3, 2, L.PAL.ink);
+
+        /* ---------- info game terpilih ---------- */
+        var cur = ITEMS[sel];
+        L.line(ctx, 14, 176, 166, 176, L.PAL.mid);
+        L.textCenter(ctx, cur.name, 90, 188, 8, L.PAL.ink);
+        L.textCenter(ctx, cur.sub, 90, 206, 8, L.PAL.mid);
+        L.textCenter(ctx, cur.year + '   HI ' + (api.hi.get(cur.id) || 0), 90, 224, 8, L.PAL.mid);
+
         /* petunjuk bawah */
-        var hy = 320;
-        L.line(ctx, 14, hy - 8, 166, hy - 8, L.PAL.mid);
-        L.textCenter(ctx, 'A:PLAY', 66, hy, 8, L.PAL.ink);
-        L.text(ctx, 'UP/DN', 100, hy, 8, L.PAL.mid);
+        L.line(ctx, 14, 248, 166, 248, L.PAL.mid);
+        L.textCenter(ctx, 'L/R SELECT', 90, 260, 8, L.PAL.mid);
+        L.textCenter(ctx, 'A:PLAY', 90, 282, 8, L.PAL.ink);
 
         /* kedip kecil di kanan bawah */
         if (blink < 550) {
-          L.box(ctx, 160, 348, 5, 5, L.PAL.ink);
+          L.box(ctx, 160, 346, 5, 5, L.PAL.ink);
         }
       };
 
