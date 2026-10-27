@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TETRIS — Handheld Block Game 1990</title>
-<meta name="description" content="Tetris klasik bergaya handheld LCD tahun 90-an. Main langsung di browser.">
+<title>MINI ARCADE — Handheld LCD 1990</title>
+<meta name="description" content="Tiga game klasik dalam satu handheld LCD 90-an: Tetris, Metal Slug, dan Flappy Bird. Main langsung di browser.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%239bbc0f'/><rect x='2' y='2' width='5' height='5' fill='%230f380f'/><rect x='9' y='2' width='5' height='5' fill='%230f380f'/><rect x='2' y='9' width='5' height='5' fill='%230f380f'/></svg>">
 <link rel="preload" href="assets/fonts/press-start-2p.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
@@ -19,36 +19,36 @@
       <div class="brand__stripes" aria-hidden="true">
         <span></span><span></span><span></span>
       </div>
-      <h1 class="brand__title">TETRIS</h1>
-      <p class="brand__sub">BLOCK GAME &middot; LCD COLOR &middot; 1990</p>
+      <h1 class="brand__title">MINI ARCADE</h1>
+      <p class="brand__sub">3 GAMES IN 1 &middot; LCD COLOR &middot; 1990</p>
     </div>
 
     <!-- ── Bezel + layar LCD ────────────────────────────────── -->
     <div class="bezel">
       <div class="screen" id="screen">
-        <div class="lcd">
-          <div class="lcd__board">
-            <canvas id="board" width="180" height="360" aria-label="Area permainan Tetris"></canvas>
+        <div class="lcd" id="lcd">
+          <div class="lcd__board" id="boardWrap">
+            <canvas id="board" width="180" height="360" aria-label="Layar permainan"></canvas>
           </div>
 
-          <aside class="lcd__panel">
-            <div class="stat">
-              <span class="stat__label">SCORE</span>
-              <span class="stat__value" id="score">0</span>
+          <aside class="lcd__panel" id="panel">
+            <div class="stat" data-slot="1">
+              <span class="stat__label" id="l1">SCORE</span>
+              <span class="stat__value" id="v1">0</span>
             </div>
-            <div class="stat">
-              <span class="stat__label">HI</span>
-              <span class="stat__value" id="hiscore">0</span>
+            <div class="stat" data-slot="2">
+              <span class="stat__label" id="l2">HI</span>
+              <span class="stat__value" id="v2">0</span>
             </div>
-            <div class="stat">
-              <span class="stat__label">LEVEL</span>
-              <span class="stat__value" id="level">1</span>
+            <div class="stat" data-slot="3">
+              <span class="stat__label" id="l3">LEVEL</span>
+              <span class="stat__value" id="v3">1</span>
             </div>
-            <div class="stat">
-              <span class="stat__label">LINES</span>
-              <span class="stat__value" id="lines">0</span>
+            <div class="stat" data-slot="4">
+              <span class="stat__label" id="l4">LINES</span>
+              <span class="stat__value" id="v4">0</span>
             </div>
-            <div class="next">
+            <div class="next" data-slot="next">
               <span class="stat__label">NEXT</span>
               <div class="next__box">
                 <canvas id="next" width="72" height="72" aria-label="Blok berikutnya"></canvas>
@@ -61,11 +61,11 @@
           </aside>
         </div>
 
-        <!-- Overlay pesan (start / pause / game over) -->
+        <!-- Overlay pesan (siap / pause / game over) -->
         <div class="overlay" id="overlay" data-state="ready">
-          <p class="overlay__title" id="ovTitle">TETRIS</p>
+          <p class="overlay__title" id="ovTitle">MINI ARCADE</p>
           <p class="overlay__msg" id="ovMsg">PRESS START</p>
-          <p class="overlay__hint" id="ovHint">&uarr; putar &middot; &larr;&rarr; geser &middot; spasi jatuh</p>
+          <p class="overlay__hint" id="ovHint">&uarr;&darr; pilih game &middot; A main</p>
         </div>
       </div>
     </div>
@@ -73,19 +73,19 @@
     <!-- ── Kontrol fisik ────────────────────────────────────── -->
     <div class="controls">
       <div class="dpad" role="group" aria-label="Tombol arah">
-        <button class="dpad__btn dpad__btn--up"    data-action="rotate"  aria-label="Putar blok">&#9650;</button>
-        <button class="dpad__btn dpad__btn--left"  data-action="left"    aria-label="Geser kiri">&#9664;</button>
+        <button class="dpad__btn dpad__btn--up"    data-action="up"    aria-label="Atas">&#9650;</button>
+        <button class="dpad__btn dpad__btn--left"  data-action="left"  aria-label="Kiri">&#9664;</button>
         <div class="dpad__hub" aria-hidden="true"></div>
-        <button class="dpad__btn dpad__btn--right" data-action="right"   aria-label="Geser kanan">&#9654;</button>
-        <button class="dpad__btn dpad__btn--down"  data-action="down"    aria-label="Turun cepat">&#9660;</button>
+        <button class="dpad__btn dpad__btn--right" data-action="right" aria-label="Kanan">&#9654;</button>
+        <button class="dpad__btn dpad__btn--down"  data-action="down"  aria-label="Bawah">&#9660;</button>
       </div>
 
       <div class="ab" role="group" aria-label="Tombol aksi">
         <div class="ab__col">
-          <button class="ab__btn ab__btn--b" data-action="rotateCCW" aria-label="Putar balik">B</button>
+          <button class="ab__btn ab__btn--b" data-action="b" aria-label="Tombol B">B</button>
         </div>
         <div class="ab__col">
-          <button class="ab__btn ab__btn--a" data-action="drop" aria-label="Jatuhkan blok">A</button>
+          <button class="ab__btn ab__btn--a" data-action="a" aria-label="Tombol A">A</button>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
       <button class="pill pill--start" id="btnStart">START</button>
       <button class="pill" id="btnPause">PAUSE</button>
       <button class="pill" id="btnSound" aria-pressed="true">SOUND&nbsp;ON</button>
-      <button class="pill pill--reset" id="btnReset">RESET</button>
+      <button class="pill pill--reset" id="btnReset">MENU</button>
     </div>
 
     <!-- ── Detail kosmetik ──────────────────────────────────── -->
@@ -110,16 +110,20 @@
   </div>
 
   <p class="pagehint">
-    <kbd>&larr;</kbd><kbd>&rarr;</kbd> geser &nbsp;·&nbsp;
-    <kbd>&darr;</kbd> turun &nbsp;·&nbsp;
-    <kbd>&uarr;</kbd>/<kbd>X</kbd> putar &nbsp;·&nbsp;
-    <kbd>Z</kbd> putar balik &nbsp;·&nbsp;
-    <kbd>Space</kbd> jatuh &nbsp;·&nbsp;
+    <kbd>&uarr;</kbd><kbd>&darr;</kbd> pilih &nbsp;·&nbsp;
+    <kbd>&larr;</kbd><kbd>&rarr;</kbd> gerak &nbsp;·&nbsp;
+    <kbd>Space</kbd>/<kbd>X</kbd> A &nbsp;·&nbsp;
+    <kbd>Z</kbd> B &nbsp;·&nbsp;
     <kbd>P</kbd> pause &nbsp;·&nbsp;
-    <kbd>R</kbd> reset
+    <kbd>R</kbd> menu
   </p>
 </main>
 
-<script src="tetris.js"></script>
+<script src="js/lcd.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/tetris.js"></script>
+<script src="js/metalslug.js"></script>
+<script src="js/flappy.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

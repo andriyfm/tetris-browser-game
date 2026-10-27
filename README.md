@@ -1,11 +1,21 @@
-# TETRIS — Handheld Block Game (1990)
+# MINI ARCADE — 3 Games in 1 (Handheld LCD 1990)
 
-Tetris klasik yang jalan langsung di browser, dibungkus dalam replika **handheld LCD era 90-an**:
-bodi plastik beige, layar LCD hijau dengan scanline, D-pad, tombol A/B merah, speaker grille,
-sampai stiker "© 1990" di bagian bawah. Bukan full screen — device-nya berdiri di tengah halaman
-dan mengecil sendiri kalau layar pendek.
+Tiga game klasik dalam **satu handheld LCD era 90-an**: Tetris, Metal Slug, dan Flappy Bird.
+Bodi plastik beige, layar LCD hijau dengan scanline, D-pad, tombol A/B merah, speaker grille,
+sampai stiker "© 1990" di bawah. Bukan full screen — device-nya berdiri di tengah halaman dan
+mengecil sendiri kalau layar pendek.
 
-![Screenshot](docs/screenshot.jpg)
+Pilih game dari menu cartridge, semua dirender monokrom di layar LCD yang sama.
+
+![Menu](docs/screen-menu.jpg)
+
+| Tetris | Metal Slug |
+| --- | --- |
+| ![Tetris](docs/screen-tetris.jpg) | ![Metal Slug](docs/screen-slug.jpg) |
+
+| Flappy |
+| --- |
+| ![Flappy](docs/screen-flappy.jpg) |
 
 ## Main sekarang
 
@@ -17,85 +27,111 @@ dan mengecil sendiri kalau layar pendek.
   # lalu buka http://localhost:8000
   ```
 
-Tanpa install, tanpa build step, tanpa dependency. Font pixel sudah di-vendor lokal,
-jadi game tetap tampil benar walau offline.
+Tanpa install, tanpa build step, tanpa dependency. Font pixel di-vendor lokal, jadi tetap
+tampil benar walau offline.
+
+## Game yang tersedia
+
+### 1. TETRIS — *Block Game (1990)*
+Papan 10 × 20, tujuh tetromino, **7-bag randomizer**, rotasi dua arah dengan wall kick,
+ghost piece, level naik tiap 10 baris. Skor klasik: single 40, double 100, triple 300,
+tetris 1200 — dikali level.
+
+### 2. METAL SLUG — *Run & Gun (1996)*
+Side-scroller satu layar dengan kamera bergerak, parallax tiga lapis (awan, gunung, palem + pagar),
+prajurit berhelm, dua tipe musuh:
+- **Grunt** — mendekat lalu menembak; helm berjambul jadi pembeda dari pemain.
+- **Charger** — lari kencang dan menyerang jarak dekat.
+
+3 nyawa, tembakan otomatis saat **B** ditahan, bidik ke atas dengan **↑**, dan misi berganti
+setiap kali kamu mencapai ujung stage (+500 bonus). Kesulitan naik per misi.
+
+### 3. FLAPPY — *One Button (2013)*
+Fisika gravitasi + impuls kepak, pipa dengan celah acak, kecepatan naik seiring skor,
+ground scroll, dan skor besar di tengah layar.
 
 ## Kontrol
 
-| Aksi | Keyboard | Tombol di device |
+**Global**
+
+| Aksi | Keyboard | Tombol device |
 | --- | --- | --- |
-| Geser kiri / kanan | `←` `→` | D-pad kiri / kanan |
-| Turun perlahan (+1 poin/sel) | `↓` | D-pad bawah |
-| Jatuh langsung (+2 poin/sel) | `Space` | Tombol **A** |
-| Putar searah jarum jam | `↑` / `X` | D-pad atas |
-| Putar balik | `Z` | Tombol **B** |
-| Pause / lanjut | `P` / `Esc` | `PAUSE` |
-| Mulai / ulang | `Enter` / `Space` | `START` |
-| Reset ke layar awal | `R` | `RESET` |
+| Pilih game | `↑` `↓` | D-pad atas / bawah |
+| Pause / lanjut | `P` | `PAUSE` |
+| Mulai / ulang ronde | `Enter` | `START` |
+| Kembali ke menu | `R` / `Esc` | `MENU` |
 | Suara on/off | — | `SOUND ON` |
 
-Tombol di device bisa diklik/ditap dan punya auto-repeat kalau ditahan (geser & turun).
-Semua tombol juga punya label `aria-label`, jadi bisa dipakai dengan pembaca layar.
+**Per game**
 
-## Aturan & skor
+| Game | D-pad | A | B |
+| --- | --- | --- | --- |
+| Tetris | `←` `→` geser, `↓` turun, `↑` putar | jatuh langsung | putar balik |
+| Metal Slug | `←` `→` lari, `↑` bidik atas | lompat | tembak (tahan = auto) |
+| Flappy | — | kepak | kepak |
 
-- Papan 10 × 20, tujuh tetromino (I, J, L, O, S, T, Z).
-- **7-bag randomizer** — setiap tipe keluar sekali sebelum kantong diacak ulang,
-  jadi tidak ada rentetan S/Z yang bikin frustrasi.
-- Rotasi dua arah dengan wall kick sederhana (coba geser 1–2 sel, lalu naik 1 sel).
-- Skor klasik: single **40**, double **100**, triple **300**, tetris **1200** — dikali level.
-- Level naik setiap 10 baris; kecepatan jatuh mengikuti tabel 21 tingkat.
-- Hi-score disimpan di `localStorage` (`tetris-hi`).
-- Ada *ghost piece* samar sebagai penanda posisi jatuh.
+Tombol device bisa diklik/ditap dan punya **auto-repeat** saat ditahan (geser/turun).
+Semua tombol punya `aria-label`.
 
 ## Struktur project
 
 ```
 .
-├── index.html               # markup device + layar + kontrol
+├── index.html               # cangkang device: brand, bezel, layar, D-pad, A/B, pill
 ├── styles.css               # bodi plastik, bezel, LCD, tombol, media query
-├── tetris.js                # mesin game (canvas, rotasi, skor, SFX, auto-fit)
+├── js/
+│   ├── lcd.js               # toolkit LCD: palet, dither, teks pixel, sprite, SFX
+│   ├── menu.js              # layar GAME SELECT (kartrid)
+│   ├── tetris.js            # game 1
+│   ├── metalslug.js         # game 2
+│   ├── flappy.js            # game 3
+│   └── main.js              # wiring device, loop, input, panel skor, auto-fit
 ├── assets/fonts/            # Press Start 2P (woff2) + lisensi OFL
-├── docs/screenshot.jpg      # tangkapan layar untuk README
-└── tests/smoke.console.js   # smoke test (dijalankan di Console browser)
+├── docs/                    # screenshot README
+└── tests/smoke.console.js   # smoke test 21 cek (jalankan di Console browser)
 ```
 
 ## Detail teknis
 
-- **Rendering:** satu `<canvas>` 180 × 360 (10 × 20 sel @18px) diskalakan dengan
-  `image-rendering: pixelated`; context di-scale mengikuti `devicePixelRatio` agar tajam di layar HiDPI.
-- **Loop:** `requestAnimationFrame` dengan akumulator waktu dan `dt` di-clamp 100 ms,
-  jadi tidak melompat saat tab sempat tidak aktif.
-- **Audio:** WebAudio `square` oscillator untuk SFX 8-bit (gerak, putar, kunci, line clear,
-  level up, game over). Tidak ada file audio.
-- **Auto-fit:** tinggi device diukur, lalu `transform: scale()` dipakai kalau viewport pendek;
-  sisa ruang ditarik lewat margin negatif supaya halaman tidak ikut memanjang.
-- **Aksesibilitas:** overlay status punya teks jelas, tombol punya `aria-label`/`aria-pressed`,
-  dan animasi kedip dimatikan pada `prefers-reduced-motion`.
+- **Satu layar, banyak game.** Setiap game mendeklarasikan ukuran kanvas logis dan rasio
+  layarnya sendiri: Tetris 180×360 (1:2), Metal Slug 320×180 (16:9), Flappy 180×320.
+  Device menyesuaikan tinggi bezel, lalu auto-fit menghitung ulang skala.
+- **Kontrak game seragam:** `{ w, h, boardMax, usePanel, labels, create(api) }` dan instance
+  dengan `reset()`, `update(dt)`, `render(ctx)`, `input(action)`, `state`.
+  Menu adalah game biasa, jadi tidak ada jalur kode khusus.
+- **Rendering:** kanvas logis × `devicePixelRatio`, `ctx.setTransform(dpr,…)`,
+  CSS `width:100%` + `image-rendering: pixelated`.
+- **Palet LCD 3 nada:** `bg`, `mid` (dither 50%), dan `ink`, plus dither 25% untuk latar jauh —
+  supaya sprite selalu lebih tegas dari latar di layar monokrom.
+- **Loop:** `requestAnimationFrame` dengan `dt` di-clamp 100 ms. Fisika memakai **detik**
+  (`dt/1000`), timer UI memakai milidetik.
+- **Audio:** WebAudio oscillator `square` + noise buffer untuk ledakan. Tanpa file audio.
+- **Auto-fit:** `transform: scale(k)` + margin negatif, dihitung ulang setiap ganti game.
 
 ## Debug & pengujian
 
-Tambahkan `?debug=1` pada URL untuk membuka `window.__tetris`
-(`board`, `score`, `lines`, `lockPiece`, `setBoard`, `setPiece`, …). Dipakai untuk uji otomatis
-lewat browser, misalnya memaksa satu baris penuh untuk memverifikasi line clear:
+Tambahkan `?debug=1` pada URL untuk membuka `window.__game`:
 
 ```js
-const T = window.__tetris;
-T.start();
-const b = T.board.map(r => r.slice());
-for (let x = 1; x < 10; x++) b[19][x] = 1;   // sisakan lubang di kolom 0
-T.setBoard(b);
-T.setPiece({ type: 'X', m: [[1]], x: 0, y: 19 });
-T.lockPiece();                                // → lines: 1, score: 40
+__game.launch('metalslug')     // pindah game
+__game.startRound()            // mulai ronde
+__game.input('a')              // kirim aksi (left/right/up/down/a/b)
+__game.held('right', true)     // tahan tombol
+__game.step(16, 60)            // majukan 60 frame × 16 ms tanpa menunggu rAF
+__game.game.debugState()       // angka state: skor, hp, posisi, jumlah musuh/pipa
+__game.menu()                  // kembali ke menu
 ```
 
-**Smoke test:** buka `index.html?debug=1`, lalu tempel isi `tests/smoke.console.js`
-ke Console DevTools. Hasilnya 7 cek PASS/FAIL (start, skor, line clear, geser baris, game over).
+**Smoke test:** buka `index.html?debug=1`, tempel isi `tests/smoke.console.js` ke Console.
+Hasilnya **21 cek PASS/FAIL** yang mencakup: boot menu, Tetris (blok terkunci, skor, panel),
+Metal Slug (gerak, lompat, mendarat, menembak), Flappy (gravitasi, kepak, skor pipa),
+dan kembali ke menu.
 
 ## Lisensi
 
 - Kode: **MIT** — lihat [LICENSE](LICENSE).
 - Font *Press Start 2P*: **SIL Open Font License 1.1** — lihat `assets/fonts/OFL.txt`.
 
-Tetris adalah merek dagang Tetris Holding. Project ini dibuat untuk latihan/tujuan edukasi
-dan tidak berafiliasi dengan pemegang merek.
+Tetris, Metal Slug, dan Flappy Bird adalah merek dagang pemiliknya masing-masing.
+Project ini dibuat untuk latihan/tujuan edukasi, tanpa aset dari game aslinya, dan tidak
+berafiliasi dengan pemegang merek.

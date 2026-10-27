@@ -153,9 +153,9 @@ body::after {
 
 .brand__title {
   margin: 0;
-  font-size: 26px;
+  font-size: 21px;
   line-height: 1;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: #2b2a26;
   text-shadow:
     0 1px 0 rgba(255,255,255,.85),
@@ -244,10 +244,18 @@ body::after {
 .lcd__board {
   flex: 1 1 auto;
   min-width: 0;
+  max-width: 244px;
+  margin-inline: auto;
   padding: 3px;
   border-radius: 2px;
   background: var(--lcd-bg-2);
   box-shadow: inset 0 0 0 1px rgba(15,56,15,.30);
+}
+
+/* panel skor bisa dimatikan per game */
+.lcd__panel[hidden],
+[data-slot][hidden] {
+  display: none !important;
 }
 
 #board {
