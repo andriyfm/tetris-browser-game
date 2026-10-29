@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Laporkan celah keamanan (privat)
+    url: https://github.com/andriyfm/tetris-browser-game/security/policy
+    about: Jangan buka issue publik untuk masalah keamanan. Baca SECURITY.md dan pakai "Report a vulnerability".
+  - name: 🙌 Cari issue untuk pemula
+    url: https://github.com/andriyfm/tetris-browser-game/issues?q=is%3Aopen+label%3A%22good+first+issue%22
+    about: Mau mulai kontribusi? Lihat issue berlabel good first issue.

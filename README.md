@@ -1,5 +1,15 @@
 # MINI ARCADE — 4 Games in 1 (Handheld LCD 1990)
 
+[![CI](https://github.com/andriyfm/tetris-browser-game/actions/workflows/ci.yml/badge.svg)](https://github.com/andriyfm/tetris-browser-game/actions/workflows/ci.yml)
+[![Lisensi: MIT](https://img.shields.io/badge/lisensi-MIT-blue.svg)](LICENSE)
+[![good first issue](https://img.shields.io/github/issues/andriyfm/tetris-browser-game/good%20first%20issue?label=good%20first%20issue&color=7057ff)](https://github.com/andriyfm/tetris-browser-game/issues?q=is%3Aopen+label%3A%22good+first+issue%22)
+
+### 🎮 [**Main sekarang → andriyfm.github.io/tetris-browser-game**](https://andriyfm.github.io/tetris-browser-game/)
+
+<p align="center">
+  <img src="docs/demo.gif" alt="Demo MINI ARCADE: menu, Tetris, Metal Slug, Flappy, dan Tamagotchi di handheld LCD" width="360">
+</p>
+
 Empat game klasik dalam **satu handheld LCD era 90-an**: Tetris, Metal Slug, Flappy Bird, dan Tamagotchi.
 Bodi plastik beige, layar LCD hijau dengan scanline, D-pad, tombol A/B merah, speaker grille,
 sampai stiker "© 1990" di bawah. Bukan full screen — device-nya berdiri di tengah halaman dan
@@ -101,8 +111,12 @@ Semua tombol punya `aria-label`.
 │   ├── tamagochi.js         # game 4
 │   └── main.js              # wiring device, loop, input, panel skor, auto-fit
 ├── assets/fonts/            # Press Start 2P (woff2) + lisensi OFL
-├── docs/                    # screenshot README
-└── tests/smoke.console.js   # smoke test 38 cek (jalankan di Console browser)
+├── docs/                    # screenshot + demo.gif README
+├── tests/
+│   ├── smoke.console.js     # smoke test 38 cek (jalankan di Console browser)
+│   └── run-smoke.mjs        # runner headless (Playwright) — dipakai CI
+├── package.json             # dev-only: Playwright untuk runner tes (game tetap tanpa dependency)
+└── .github/                 # workflow CI, Dependabot, template issue & PR
 ```
 
 ## Detail teknis
@@ -141,6 +155,36 @@ __game.menu()                  // kembali ke menu
 Hasilnya **38 cek PASS/FAIL** yang mencakup: boot menu + navigasi grid kiri/kanan, Tetris (blok terkunci, skor, panel),
 Metal Slug (gerak, lompat, mendarat, menembak), Flappy (gravitasi, kepak, skor pipa),
 Tamagotchi (usia & stat berjalan, menu aksi, FEED/PLAY, mati saat diabaikan), dan kembali ke menu.
+
+**Runner headless (sama seperti CI):** smoke test yang sama bisa dijalankan otomatis di
+Chromium headless lewat Playwright (devDependency, hanya untuk tes):
+
+```bash
+npm ci
+npx playwright install chromium
+npm test            # = node tests/run-smoke.mjs
+```
+
+Runner menyalakan static server kecil sendiri, membuka `index.html?debug=1`, menjalankan
+`tests/smoke.console.js`, lalu gagal (exit 1) kalau ada cek yang FAIL, ada `console.error`
+/ error JavaScript di halaman, atau ada file yang gagal dimuat. Pakai server sendiri:
+`BASE_URL=http://127.0.0.1:8000 npm test`.
+
+**CI:** workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) (job `smoke-test`)
+menjalankan runner ini di setiap pull request dan push ke `main` — repo disajikan statis
+dengan `python3 -m http.server`, lalu smoke test dijalankan di Chromium headless.
+
+## Kontribusi
+
+Kontribusi terbuka untuk siapa saja — dari benerin typo sampai fitur baru. 🙌
+
+- Baca dulu **[CONTRIBUTING.md](CONTRIBUTING.md)**: cara jalanin lokal, smoke test, gaya kode,
+  konvensi commit, dan alur PR.
+- Ikuti **[Kode Etik (Code of Conduct)](CODE_OF_CONDUCT.md)**.
+- Mau mulai dari yang ringan? Cek
+  **[issue berlabel `good first issue`](https://github.com/andriyfm/tetris-browser-game/issues?q=is%3Aopen+label%3A%22good+first+issue%22)**.
+- Nemu bug atau punya ide game? Buka [issue baru](https://github.com/andriyfm/tetris-browser-game/issues/new/choose).
+- Masalah keamanan? Jangan lewat issue publik — lihat [SECURITY.md](SECURITY.md).
 
 ## Lisensi
 
