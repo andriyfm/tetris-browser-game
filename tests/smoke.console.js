@@ -2,7 +2,7 @@
    SMOKE TEST — tempel di Console browser pada
    http://localhost:8000/index.html?debug=1
 
-   Tanpa dependency. Menguji ketiga mini-game lewat hook
+   Tanpa dependency. Menguji menu + keempat mini-game lewat hook
    window.__game (launch / startRound / step / debugState).
    Semua asersi berupa angka state, bukan waktu.
    ============================================================ */
@@ -71,7 +71,10 @@
   g.input('a');                        // lompat
   g.step(16, 6);
   truthy('slug: lompat mengangkat pemain', g.game.debugState().py < 148, g.game.debugState().py);
-  g.step(16, 80);                      // mendarat lagi
+  /* mendarat lagi: maju per frame sampai menyentuh tanah. Dicek di frame
+     pendaratan, karena setelahnya musuh (spawn acak) bisa menabrak pemain
+     dan efek knockback-nya mengangkat pemain lagi -> cek jadi flaky. */
+  for (var j = 0; j < 80 && g.game.debugState().py !== 148; j++) g.step(16, 1);
   check('slug: mendarat kembali', g.game.debugState().py, 148);
 
   g.held('b', true);                   // tembak
