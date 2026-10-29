@@ -1,0 +1,87 @@
+name: 🐛 Laporan bug
+description: Ada yang error, aneh, atau tidak sesuai di salah satu game.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Makasih sudah melapor! Sebelum lanjut, cek dulu apakah bug yang sama sudah
+        dilaporkan di [daftar issue](https://github.com/andriyfm/tetris-browser-game/issues).
+        Untuk masalah **keamanan**, jangan pakai form ini — lihat [SECURITY.md](https://github.com/andriyfm/tetris-browser-game/security/policy).
+  - type: dropdown
+    id: game
+    attributes:
+      label: Game
+      description: Bug-nya muncul di bagian mana?
+      options:
+        - Menu (GAME SELECT)
+        - Tetris
+        - Metal Slug
+        - Flappy
+        - Tamagotchi
+        - Device / tombol / layout (umum)
+        - Lainnya
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & perangkat
+      description: Contoh — Chrome 130 di Windows 11, Safari di iPhone 13, Firefox di Android.
+      placeholder: Chrome 130 / Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: input
+    attributes:
+      label: Cara main
+      options:
+        - Keyboard
+        - Klik mouse di tombol device
+        - Layar sentuh (tap)
+        - Campuran
+    validations:
+      required: false
+  - type: textarea
+    id: steps
+    attributes:
+      label: Langkah reproduksi
+      description: Langkah-langkah supaya bug-nya muncul lagi.
+      placeholder: |
+        1. Buka https://andriyfm.github.io/tetris-browser-game/
+        2. Pilih METAL SLUG, tekan A
+        3. Tahan → lalu ...
+        4. Lihat ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Yang diharapkan
+      description: Seharusnya terjadi apa?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Yang terjadi
+      description: Yang benar-benar terjadi. Kalau ada error di Console browser (F12), tempel di sini.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot / rekaman
+      description: Seret file gambar atau video ke sini (opsional tapi sangat membantu).
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Cek dulu
+      options:
+        - label: Saya sudah mencari issue serupa dan belum ada.
+          required: true
+        - label: Saya sudah refresh halaman (Ctrl/Cmd + Shift + R) dan bug-nya masih ada.
+          required: false

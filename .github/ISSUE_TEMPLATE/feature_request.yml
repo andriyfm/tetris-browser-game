@@ -1,0 +1,58 @@
+name: 💡 Ide fitur / ide game
+description: Usul fitur baru, perbaikan kecil, atau ide game baru untuk handheld-nya.
+title: "ide: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ide apa pun boleh! Ingat gaya project-nya: **satu handheld LCD monokrom ala 1990**,
+        vanilla JS, **tanpa dependency**. Ide game baru biasanya butuh diskusi dulu sebelum
+        dikerjakan, jadi tidak apa-apa kalau belum detail.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Jenis ide
+      options:
+        - Fitur / perbaikan di game yang sudah ada
+        - Game baru (kartrid baru)
+        - Device / tampilan / kontrol
+        - Aksesibilitas
+        - Dokumentasi
+        - Lainnya
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah atau motivasi
+      description: Kenapa ide ini perlu? Apa yang kurang sekarang?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Usulan
+      description: Gambarkan idenya. Untuk game baru — mekanik inti, kontrol (D-pad, A, B), dan skornya.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif yang sudah dipikirkan
+    validations:
+      required: false
+  - type: textarea
+    id: refs
+    attributes:
+      label: Referensi / gambar
+      description: Sketsa, screenshot game lain, link video (opsional).
+    validations:
+      required: false
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Kontribusi
+      options:
+        - label: Saya mau ikut mengerjakan ide ini.
+          required: false
